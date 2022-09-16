@@ -1,0 +1,8 @@
+.git/
+kustomize/
+
+*.md
+*.yaml
+*_test.go 
+
+Dockerfile
