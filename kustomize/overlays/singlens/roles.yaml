@@ -15,11 +15,12 @@ metadata:
 rules:
   - apiGroups:
       - "apps"
-      - "v1"
+      - ""
     resources:
       - "pods"
       - "deployments/scale"
     verbs:
+      - get
       - list
       - delete
       - patch

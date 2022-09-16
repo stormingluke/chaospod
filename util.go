@@ -9,7 +9,6 @@ package main
 import (
 	"context"
 	"errors"
-	"fmt"
 	"math/rand"
 	"os"
 	"strconv"
@@ -49,7 +48,6 @@ func utilListPodsInNamespace(
 	if err != nil {
 		return &corev1.PodList{}, errors.New("could not get pods")
 	}
-	fmt.Println("pods: ", pods)
 	return pods, nil
 }
 

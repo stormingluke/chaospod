@@ -15,12 +15,12 @@ resource "google_artifact_registry_repository" "artifact_registry_controlplane" 
 }
 
 resource "google_cloudbuild_trigger" "include-build-logs-trigger" {
-  name     = "controlplane-podchaos"
+  name     = "chaospod"
   filename = "cloudbuild.yaml"
 
   github {
     owner = var.GITHUB_OWNER
-    name  = "podchaosmonkey"
+    name  = "chaospod"
     push {
       branch = "^main$"
     }
