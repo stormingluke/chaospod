@@ -1,0 +1,13 @@
+steps:
+  # Build the container image
+  - name: "gcr.io/kaniko-project/executor:latest"
+    args:
+      - --destination=${_LOCATION}-docker.pkg.dev/$PROJECT_ID/${_REPOSITORY}/${_IMAGE}:$SHORT_SHA
+      - --cache=true
+      - --cache-ttl=24h
+substitutions:
+  _LOCATION: europe-west4
+  _REPOSITORY: controlplane
+  _IMAGE: podchaos
+  _REGION: europe-west4
+timeout: "1200s"

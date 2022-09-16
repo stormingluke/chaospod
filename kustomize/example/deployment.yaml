@@ -1,0 +1,67 @@
+# apiVersion: v1
+# kind: Namespace
+# metadata:
+#   name: workloads
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx01
+  namespace: workloads
+  labels:
+    app: nginx
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: nginx
+  template:
+    metadata:
+      labels:
+        app: nginx
+    spec:
+      containers:
+        - name: nginx
+          image: nginx:1.14.2
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx02
+  namespace: workloads
+  labels:
+    app: nginx
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: nginx
+  template:
+    metadata:
+      labels:
+        app: nginx
+    spec:
+      containers:
+        - name: nginx
+          image: nginx:1.14.2
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx03
+  namespace: workloads
+  labels:
+    app: nginx
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: nginx
+  template:
+    metadata:
+      labels:
+        app: nginx
+    spec:
+      containers:
+        - name: nginx
+          image: nginx:1.14.2

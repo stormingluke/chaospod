@@ -1,0 +1,15 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+namespace: workloads
+
+commonAnnotations:
+  engineer: luke.caradine@pon.com
+commonLabels:
+  business: controlplane
+  project: podchaosmonkey
+  environment: dev
+
+resources:
+  - ./../../base
+  - ./roles.yaml

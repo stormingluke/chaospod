@@ -1,0 +1,25 @@
+apiVersion: skaffold/v2beta29
+kind: Config
+metadata:
+  name: podchaosmonkey
+build:
+  artifacts:
+    - image: europe-west4-docker.pkg.dev/edgerx/controlplane/podchaos
+      docker:
+        cacheFrom:
+          # googleCloudBuild replaces cache references to the artifact image with
+          # the tagged image reference, useful for caching from the previous build.
+          - europe-west4-docker.pkg.dev/edgerx/controlplane/podchaos
+  googleCloudBuild:
+    kanikoImage: gcr.io/kaniko-project/executor
+    projectId: edgerx
+deploy:
+  kustomize:
+    paths:
+      - kustomize
+profiles:
+  - name: singlens
+    deploy:
+      kustomize:
+        paths:
+          - kustomize/overlays/singlens

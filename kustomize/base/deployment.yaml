@@ -1,0 +1,56 @@
+# https://kubernetes.io/docs/concepts/workloads/controllers/deployment/
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: chaospod
+  labels:
+    app: chaospod
+    app.kubernetes.io/name: chaospod
+spec:
+  selector:
+    matchLabels:
+      app: chaospod
+  replicas: 1
+  strategy:
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app: chaospod
+        app.kubernetes.io/name: chaospod
+    spec:
+      serviceAccountName: chaospodsa
+      terminationGracePeriodSeconds: 5
+      securityContext:
+        fsGroup: 2000
+        runAsGroup: 1000
+        runAsNonRoot: true
+        runAsUser: 3000
+      containers:
+        - name: chaospod
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - all
+            privileged: false
+          image: europe-west4-docker.pkg.dev/edgerx/controlplane/podchaos
+          imagePullPolicy: Always
+          resources:
+            requests:
+              cpu:
+                100m
+                # testing on my autopilot cluster, memory is always 512
+                # reality is probably 32Mi because it only needs to construct a kubeclient and a request.
+              memory: 512Mi
+            limits:
+              cpu: 100m
+              memory: 512Mi
+          ports:
+            - containerPort: 8000
+              name: chaospod
+      restartPolicy: Always
+---
