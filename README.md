@@ -33,7 +33,7 @@ doing performing delete/restart operations on purpose.
 
 Two options are provided here: one option uses a pod running inside the Namespace
 that's being tested for resilience.
-The second option deploys a container inside the `podchaos` namespace where it is granted clusterlevel permissions with DELETE action in order to delete a container in another namespace.
+The second option deploys a container inside the `podchaos` namespace where it is granted namespace bound permissions with GET, LIST, DELETE, PATCH, UPDATE action
 
 # Requirements
 
@@ -94,7 +94,7 @@ I have given the chaos deployment excessive permissions with no particular filte
 
 ## Testing
 
-Given the 'soft' time limit I have not implemented any tests in the pipeline nor any tests for in-cluster activity. Put another way: don't actually run this anywhere other than a fresh minikube setup without first writing an integraton test (perhaps on said minikube).
+Given the 'soft' time limit I have not implemented any tests in the pipeline. Put another way: don't actually run this anywhere other than a fresh minikube setup without first writing an integraton test (perhaps on said minikube).
 
 ## Build
 
