@@ -73,7 +73,7 @@ func main() {
 func pullTheLeverKronk(log *zap.Logger, kubeClient *kubernetes.Clientset, namespace string, timeout int) (err error) {
 	cctx, deadline := context.WithDeadline(context.Background(), time.Now().Add(time.Duration(timeout)*time.Second))
 	defer deadline()
-	// only expect 2 results to be passed over the channel, using buffer of 2 prevents a deadlock, and adheres to Ubers excellent go style guide.
+	// only expect 1 results to be passed over the channel, using buffer of 1, and adheres to Ubers excellent go style guide.
 	// the channel is buffered, so the 'send' in the goroutine is nonblocking. This is a common pattern to prevent goroutine leaks in case the channel is never read from: https://gobyexample.com/timeouts
 	// there is no need to return another type over the channel. The subsequent operations will output the results of the function's invocation.
 	done := make(chan bool, 1)
