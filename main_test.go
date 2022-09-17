@@ -80,7 +80,7 @@ func Test_pullTheLeverKronk(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			err := pullTheLeverKronk(tt.args.log, tt.args.kubeClient, tt.args.namespace, tt.args.podName, tt.args.timeout)
+			err := pullTheLeverKronk(tt.args.log, tt.args.kubeClient, tt.args.namespace, tt.args.timeout)
 			if (err != nil) != tt.wantErr {
 				t.Errorf("pullTheLeverKronk() error = %v, wantErr %v", err, tt.wantErr)
 			}

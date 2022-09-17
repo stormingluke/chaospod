@@ -55,16 +55,11 @@ func utilListPodsInNamespace(
 // utilGetEnvVars gets a target namespace from the environment varibale TARGET_NAMESPACE if it is not set it defaults to 'workloads'.
 // it can accept a podName through the WRONG_LEVER environment variable but defaults to an emptyString if not set.
 // It looks for a TIMEOUT environment variable and defaults to a 10 Second operation if no timeout is specified.
-func utilGetEnvVars(log *zap.Logger) (namespace string, podName string, timeout int) {
+func utilGetEnvVars(log *zap.Logger) (namespace string, timeout int) {
 	namespace, err := utilLookupEnvVar("TARGET_NAMESPACE")
 	if err != nil {
 		log.Sugar().Infof("did not receive a TARGET_NAMESPACE, defaulting to the 'workloads' namespace: %v", err)
 		namespace = "workloads"
-	}
-	podName, err = utilLookupEnvVar("WRONG_LEVER")
-	if err != nil {
-		log.Sugar().Infof("did not receive a podName, defaulting to a random pod in the namespace: %v", err)
-		podName = emptyString
 	}
 	timeoutVar, err := utilLookupEnvVar("TIMEOUT")
 	if err != nil {
@@ -77,7 +72,7 @@ func utilGetEnvVars(log *zap.Logger) (namespace string, podName string, timeout 
 			timeout = 10
 		}
 	}
-	return namespace, podName, timeout
+	return namespace, timeout
 }
 
 // utilLookupEnvVar is a wrapper around the os.LookupEnv function and returns an error if the environment variable is not set.
