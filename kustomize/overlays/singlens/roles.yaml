@@ -15,16 +15,19 @@ metadata:
 rules:
   - apiGroups:
       - "apps"
+    resources:
+      - "deployments/scale"
+    verbs:
+      - update
+      - get
+  - apiGroups:
       - ""
     resources:
       - "pods"
-      - "deployments/scale"
     verbs:
       - get
       - list
       - delete
-      - patch
-      - update
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
