@@ -68,7 +68,7 @@ skaffold build && skaffold render -p singlens --output render.yaml && skaffold a
 
 There is an example situation/deployment specification in `kustomize/example` this is a single file that contains 3 nginx pods with different names and a namespace.
 
-## Delete Random Pod
+# Delete Random Pod
 
 After deploying the example project in `kustomize/example` the command indicated above after editting the imageNames in the files will run and delete a random pod in the namespace. It will then scale down the chaos deployment to 0.
 

@@ -76,16 +76,16 @@ func pullTheLeverKronk(log *zap.Logger, kubeClient *kubernetes.Clientset, namesp
 	// only expect 2 results to be passed over the channel, using buffer of 2 prevents a deadlock, and adheres to Ubers excellent go style guide.
 	// the channel is buffered, so the send in the goroutine is nonblocking. This is a common pattern to prevent goroutine leaks in case the channel is never read from: https://gobyexample.com/timeouts
 	// there is no need to return another type over the channel. The subsequent operations will output the results of the function's invocation.
-	done := make(chan bool)
+	done := make(chan bool, 2)
 	go deletePod(log, kubeClient, namespace, podName, done)
 	select {
 	case ok := <-done:
 		if !ok {
 			return errors.New("delete action on pod failed")
 		} else {
-				// declare an error inside the select statement to prevent a nill pointer to an uninitialsed error. No error type is 
-				// returned from the function and the return declaration is also uninitialsed. Creating a *new() value allocates a nill 
-				// error in memory allowing the function to complete with a err == nil value.
+			// declare an error inside the select statement to prevent a nill pointer to an uninitialsed error. No error type is
+			// returned from the function and the return declaration is also uninitialsed. Creating a *new() value allocates a nill
+			// error in memory allowing the function to complete with a err == nil value.
 			return *new(error)
 		}
 	// context is cancelled after 10 seconds to prevent unnecessary cloud time
