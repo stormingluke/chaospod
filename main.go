@@ -20,7 +20,7 @@ const (
 )
 
 // initBuildLogger constructs a zap logger with the ECS format. This format is easily picked up and parsed by Elasticsearch compatible APIs and other ingestors/parsers.
-// it is returned here a a Logger but the functions that use this logger all use Sugered implementations.
+// it is returned here a Logger but the functions that use this logger all use Sugared implementations.
 func initBuildLogger() *zap.Logger {
 	config := zap.NewDevelopmentConfig()
 	config.Level.SetLevel(zapcore.InfoLevel)
@@ -52,16 +52,16 @@ func initBuildKubeClient(log *zap.Logger) (client *kubernetes.Clientset) {
 func main() {
 	logger := initBuildLogger()
 	kubeClient := initBuildKubeClient(logger)
-	namespace, podName, timeout := utilGetEnvVars(logger)
+	namespace, timeout := utilGetEnvVars(logger)
 	// pullTheLeverKronk takes a logger and a kubeclient and starts the process of deleting a pod.
 	// if it fails then the application is shut down.
-	err := pullTheLeverKronk(logger, kubeClient, namespace, podName, timeout)
+	err := pullTheLeverKronk(logger, kubeClient, namespace, timeout)
 	if err != nil {
 		log.Default().Fatalf("wrong lever! with error: %v exiting", err)
 	}
 	// scaleDownChaos runs if the previous function ran successfully.
 	// NOTE I call fatal in the previous function as a pod selected for deletion may still be starting up.
-	// Kuberenetes' state engine will restart this deployment when it is exited because it has not been
+	// Kubernetes' state engine will restart this deployment when it is exited because it has not been
 	// scaled down to 0 yet.
 	err = scaleDownChaos(logger, kubeClient, namespace)
 	if err != nil {
@@ -69,15 +69,15 @@ func main() {
 	}
 }
 
-// pullTheLeverKronk deletes a random pod from the targeted namespace. It is also a reference to Emporers New Groove.
-func pullTheLeverKronk(log *zap.Logger, kubeClient *kubernetes.Clientset, namespace, podName string, timeout int) (err error) {
+// pullTheLeverKronk deletes a random pod from the targeted namespace. It is also a reference to The Emperor's New Groove.
+func pullTheLeverKronk(log *zap.Logger, kubeClient *kubernetes.Clientset, namespace string, timeout int) (err error) {
 	cctx, deadline := context.WithDeadline(context.Background(), time.Now().Add(time.Duration(timeout)*time.Second))
 	defer deadline()
 	// only expect 2 results to be passed over the channel, using buffer of 2 prevents a deadlock, and adheres to Ubers excellent go style guide.
-	// the channel is buffered, so the send in the goroutine is nonblocking. This is a common pattern to prevent goroutine leaks in case the channel is never read from: https://gobyexample.com/timeouts
+	// the channel is buffered, so the 'send' in the goroutine is nonblocking. This is a common pattern to prevent goroutine leaks in case the channel is never read from: https://gobyexample.com/timeouts
 	// there is no need to return another type over the channel. The subsequent operations will output the results of the function's invocation.
-	done := make(chan bool, 2)
-	go deletePod(log, kubeClient, namespace, podName, done)
+	done := make(chan bool, 1)
+	go deletePod(log, kubeClient, namespace, done)
 	select {
 	case ok := <-done:
 		if !ok {
@@ -86,7 +86,7 @@ func pullTheLeverKronk(log *zap.Logger, kubeClient *kubernetes.Clientset, namesp
 			// declare an error inside the select statement to prevent a nill pointer to an uninitialsed error. No error type is
 			// returned from the function and the return declaration is also uninitialsed. Creating a *new() value allocates a nill
 			// error in memory allowing the function to complete with a err == nil value.
-			return *new(error)
+			return nil
 		}
 	// context is cancelled after 10 seconds to prevent unnecessary cloud time
 	case <-cctx.Done():
@@ -96,7 +96,7 @@ func pullTheLeverKronk(log *zap.Logger, kubeClient *kubernetes.Clientset, namesp
 
 // deletePod uses two functions to delete a pod. There is a good example including a retry peration on a pod in the release-1.18 example at:
 // https://github.com/kubernetes/client-go/tree/master/examples/create-update-delete-deployment
-func deletePod(log *zap.Logger, k *kubernetes.Clientset, namespace, pod string, done chan bool) {
+func deletePod(log *zap.Logger, k *kubernetes.Clientset, namespace string, done chan bool) {
 	ctx := context.Background()
 
 	pods, err := utilListPodsInNamespace(k, ctx, namespace)

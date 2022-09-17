@@ -97,7 +97,6 @@ func Test_utilListPodsInNamespace(t *testing.T) {
 
 func Test_utilGetEnvVars(t *testing.T) {
 	os.Setenv("TARGET_NAMESPACE", "workloads-test")
-	os.Setenv("WRONG_LEVER", "nginx-test")
 	os.Setenv("TIMEOUT", "42")
 
 	type args struct {
@@ -122,12 +121,9 @@ func Test_utilGetEnvVars(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			gotNamespace, gotPodName, gotTimeout := utilGetEnvVars(tt.args.log)
+			gotNamespace, gotTimeout := utilGetEnvVars(tt.args.log)
 			if gotNamespace != tt.wantNamespace {
 				t.Errorf("utilGetEnvVars() gotNamespace = %v, want %v", gotNamespace, tt.wantNamespace)
-			}
-			if gotPodName != tt.wantPodName {
-				t.Errorf("utilGetEnvVars() gotPodName = %v, want %v", gotPodName, tt.wantPodName)
 			}
 			if gotTimeout != tt.wantTimeout {
 				t.Errorf("utilGetEnvVars() gotTimeout = %v, want %v", gotTimeout, tt.wantTimeout)
@@ -135,6 +131,5 @@ func Test_utilGetEnvVars(t *testing.T) {
 		})
 	}
 	os.Unsetenv("TARGET_NAMESPACE")
-	os.Unsetenv("WRONG_LEVER")
 	os.Unsetenv("TIMEOUT")
 }

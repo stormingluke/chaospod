@@ -4,7 +4,7 @@ kind: Kustomization
 namespace: workloads
 
 commonAnnotations:
-  engineer: luke.caradine@pon.com
+  engineer: luke.caradine@control-plane.io
 commonLabels:
   business: controlplane
   project: podchaosmonkey
