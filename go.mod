@@ -3,13 +3,12 @@ module podchaosmonkey
 go 1.19
 
 require (
-	k8s.io/api v0.25.0
-	k8s.io/apimachinery v0.25.0
+	k8s.io/api v0.25.2
+	k8s.io/apimachinery v0.25.2
 	k8s.io/client-go v0.25.0
 )
 
 require (
-	github.com/google/go-cmp v0.5.8 // indirect
 	github.com/magefile/mage v1.9.0 // indirect
 	github.com/pkg/errors v0.9.1 // indirect
 	go.uber.org/atomic v1.7.0 // indirect
